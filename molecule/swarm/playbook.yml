@@ -1,0 +1,30 @@
+---
+- name: Converge
+  hosts: all
+  roles:
+    - role: ansible-traefik-docker
+  tasks:
+    - name: start test web server
+      docker_container:
+        name: testhttp
+        image: deis/example-go
+        state: started
+        networks:
+          - name: "{{ traefik_docker_network }}"
+        labels:
+          test: webserver
+          traefik.enable: "true"
+          traefik.docker.network: "{{ traefik_docker_network }}"
+
+  vars:
+    use_swarm: true
+    traefik_compose_version: 3
+    traefik_docker_network: "traefik"
+    traefik_docker_domain: 'traefik-swarm.docker.local'
+    traefik_acme_enable: false
+    traefik_dashboard_basicauth_enable: false
+    docker_package: "docker-{{ docker_edition }}"
+    docker_package_version: "17.03.2.ce-1.el7.centos"
+    docker_hosts:
+      - "tcp://0.0.0.0:2376"
+      - "unix:///var/run/docker.sock"

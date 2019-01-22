@@ -1,0 +1,14 @@
+---
+- name: Prepare
+  hosts: all
+  roles:
+    - role: geerlingguy.repo-epel
+    - role: geerlingguy.pip
+    - role: geerlingguy.docker
+  tasks:
+    - name: Init swarm
+      command: docker swarm init
+  vars:
+    pip_install_packages:
+      - name: docker
+      - name: docker-compose

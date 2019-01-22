@@ -11,4 +11,4 @@ test: build-testimage
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-w /tmp/${ROLENAME} \
 		${TESTIMAGENAME} \
-		sudo molecule test
+		sudo molecule test --scenario-name swarm

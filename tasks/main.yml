@@ -2,3 +2,9 @@
 - include: install.yml
 
 - include: configure.yml
+
+- include_tasks: configure-compose.yml
+  when: not use_swarm
+
+- include_tasks: configure-swarm.yml
+  when: use_swarm

@@ -1,0 +1,7 @@
+---
+- name: Create traefik docker network (Swarm)
+  command: "docker network create {{ swarm_network_opts }} {{ traefik_docker_network }}"
+  ignore_errors: true
+
+- name: Start Traefik (Swarm)
+  command: docker stack deploy --compose-file={{ traefik_compose }} traefik

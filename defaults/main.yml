@@ -1,6 +1,8 @@
 ---
 traefik_version: "latest"
 traefik_directory: "/opt/traefik"
+traefik_compose: "{{ traefik_directory }}/docker-compose.yml"
+traefik_compose_version: 2
 
 traefik_debug_enable: false
 traefik_log_level: "WARNING"
@@ -34,3 +36,7 @@ traefik_consul_enable: false
 traefik_consul_endpoint: "127.0.0.1:8500"
 traefik_consul_prefix: "traefik"
 traefik_consul_watch: true
+
+# Compose, or Swarm?
+use_swarm: false
+swarm_network_opts: "--attachable --driver=overlay"
