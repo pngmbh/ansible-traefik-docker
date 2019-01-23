@@ -15,7 +15,6 @@
           test: webserver
           traefik.enable: "true"
           traefik.docker.network: "{{ traefik_docker_network }}"
-
   vars:
     traefik_version: "v1.7.7"
     traefik_use_swarm: true
@@ -24,8 +23,3 @@
     traefik_docker_domain: 'traefik-swarm.docker.local'
     traefik_acme_enable: false
     traefik_dashboard_basicauth_enable: false
-    docker_package: "docker-{{ docker_edition }}"
-    docker_package_version: "17.03.2.ce-1.el7.centos"
-    docker_hosts:
-      - "tcp://0.0.0.0:2376"
-      - "unix:///var/run/docker.sock"

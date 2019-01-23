@@ -19,7 +19,7 @@ def test_traefik_is_running(host):
     out = host.check_output(
         'docker ps --filter "label=traefik.backend=traefik"'
         + ' --format {%raw%}"{{.Image}}"{%endraw%}')
-    assert out == 'traefik'
+    assert 'traefik' == out
 
 
 def test_host_based_routing_via_traefik(host):

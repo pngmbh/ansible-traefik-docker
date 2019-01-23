@@ -7,11 +7,11 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 
-def test_traefik_is_running(host):
+def test_traefik_is_running_on_swarm(host):
     out = host.check_output(
         'docker ps --filter "label=traefik.backend=traefik"'
         + ' --format {%raw%}"{{.Image}}"{%endraw%}')
-    assert out == 'traefik:latest'
+    assert 'traefik:latest' == out
 
 
 def test_host_based_routing_via_traefik(host):

@@ -2,9 +2,6 @@
 - name: Converge
   hosts: all
   roles:
-    - role: geerlingguy.repo-epel
-    - role: geerlingguy.pip
-    - role: geerlingguy.docker
     - role: ansible-traefik-docker
   tasks:
     - name: start test web server
@@ -18,17 +15,9 @@
           test: webserver
           traefik.enable: "true"
           traefik.docker.network: custom_traefik_net
-
   vars:
+    traefik_version: "v1.7.7"
     traefik_docker_network: "custom_traefik_net"
     traefik_docker_domain: 'traefik.docker.local'
     traefik_acme_enable: false
     traefik_dashboard_basicauth_enable: false
-    docker_package: "docker-{{ docker_edition }}"
-    docker_package_version: "17.03.2.ce-1.el7.centos"
-    docker_hosts:
-      - "tcp://0.0.0.0:2376"
-      - "unix:///var/run/docker.sock"
-    pip_install_packages:
-      - name: docker
-      - name: docker-compose
