@@ -4,7 +4,7 @@
 - include: configure.yml
 
 - include_tasks: configure-compose.yml
-  when: not use_swarm
+  when: not traefik_use_swarm
 
 - include_tasks: configure-swarm.yml
-  when: use_swarm
+  when: traefik_use_swarm

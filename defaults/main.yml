@@ -38,5 +38,5 @@ traefik_consul_prefix: "traefik"
 traefik_consul_watch: true
 
 # Compose, or Swarm?
-use_swarm: false
-swarm_network_opts: "--attachable --driver=overlay"
+traefik_use_swarm: false
+traefik_swarm_network_opts: "--attachable --driver=overlay"

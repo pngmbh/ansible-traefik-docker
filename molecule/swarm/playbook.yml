@@ -17,7 +17,8 @@
           traefik.docker.network: "{{ traefik_docker_network }}"
 
   vars:
-    use_swarm: true
+    traefik_version: "v1.7.7"
+    traefik_use_swarm: true
     traefik_compose_version: 3
     traefik_docker_network: "traefik"
     traefik_docker_domain: 'traefik-swarm.docker.local'
