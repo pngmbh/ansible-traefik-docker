@@ -5,9 +5,20 @@ services:
   traefik:
     image: traefik
     ports:
+{% if traefik_use_swarm %}
+      - target: {{ traefik_entrypoint_http_port }}
+        published: 80
+        protocol: tcp
+        mode: host
+      - target: {{ traefik_entrypoint_https_port }}
+        published: 443
+        protocol: tcp
+        mode: host
+{% else %}
       - "{{ traefik_entrypoint_http_port }}:80"
       - "{{ traefik_entrypoint_https_port }}:443"
-{% if traefik_dashboard_enable %}
+{% endif %}
+{% if traefik_dashboard_enable and not traefik_use_swarm %}
     expose:
       - {{ traefik_dashboard_entrypoint_port }}
 {% endif %}
@@ -28,7 +39,9 @@ services:
 {% if traefik_acme_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
 {% endif %}
+{% if not traefik_use_swarm %}
     container_name: traefik
+{% endif %}
 
 networks:
   {{ traefik_docker_network }}:
