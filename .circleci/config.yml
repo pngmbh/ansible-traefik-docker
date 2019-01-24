@@ -8,7 +8,7 @@ jobs:
       - checkout
       - run:
           name: Run tests
-          command: make test SCENARIO="--scenario-name swarm"
+          command: make test SCENARIO="--scenario-name swarm" DEBUG_OPTS="--destroy=never"
   test_default:
     machine:
       docker_layer_caching: true
