@@ -5,10 +5,12 @@ TESTIMAGENAME=molecule-test
 build-testimage:
 	docker build -t ${TESTIMAGENAME} .
 
+SCENARIO?=--all
+
 test: build-testimage
 	docker run --rm -it \
 		-v '${PWD}':/tmp/${ROLENAME} \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-w /tmp/${ROLENAME} \
 		${TESTIMAGENAME} \
-		sudo molecule test --all
+		sudo molecule test $(SCENARIO)
