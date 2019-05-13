@@ -14,4 +14,4 @@ test: build-testimage
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-w /tmp/${ROLENAME} \
 		${TESTIMAGENAME} \
-		sudo molecule test $(SCENARIO) $(DEBUG_OPTS)
+		molecule test $(SCENARIO) $(DEBUG_OPTS)
