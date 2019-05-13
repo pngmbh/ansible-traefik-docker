@@ -34,7 +34,6 @@ def test_host_based_routing_via_traefik(host):
         'curl -L -k -v -s -H "Host:traefik.traefik.docker.local"'
         + ' https://127.0.0.1:443/api/providers/docker')
     data = json.loads(out)
-    print data
     assert 'backends' in data
     assert 'backend-testhttp' in data['backends']
     assert 'backend-traefik' in data['backends']

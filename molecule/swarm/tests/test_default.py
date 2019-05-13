@@ -31,7 +31,6 @@ def test_traefik_found_container(host):
 
     base_host = 'traefik-swarm-docker-local'
 
-    print data
     assert 'backends' in data
     assert 'backend-testhttp' in data['backends']
     assert 'backend-traefik' in data['backends']
