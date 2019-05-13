@@ -10,11 +10,11 @@
         image: deis/example-go
         state: started
         networks:
-          - name: "{{ traefik_docker_network }}"
+          - name: "{{ traefik_docker_network }}"
         labels:
           test: webserver
           traefik.enable: "true"
-          traefik.docker.network: "{{ traefik_docker_network }}"
+          traefik.docker.network: "{{ traefik_docker_network }}"
   vars:
     traefik_version: "v1.7.7"
     traefik_use_swarm: true
