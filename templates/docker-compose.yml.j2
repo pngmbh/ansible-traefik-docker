@@ -41,6 +41,7 @@ services:
 {% endif %}
 {% if not traefik_use_swarm %}
     container_name: traefik
+    restart: always
 {% endif %}
 
 networks:
