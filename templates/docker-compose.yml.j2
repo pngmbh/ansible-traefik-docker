@@ -34,8 +34,9 @@ services:
 {% endif %}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - {{ traefik_directory }}/traefik.toml:/traefik.toml
-      - {{ traefik_directory }}/conf.d:/conf.d
+      - {{ traefik_directory }}/traefik.toml:/etc/traefik/traefik.toml
+      - {{ traefik_directory }}/conf.d:/etc/traefik/conf.d
+      - etc_traefik:/etc/traefik
 {% if traefik_acme_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
 {% endif %}
@@ -43,6 +44,9 @@ services:
     container_name: traefik
     restart: always
 {% endif %}
+
+volumes:
+  etc_traefik:
 
 networks:
   {{ traefik_docker_network }}:
