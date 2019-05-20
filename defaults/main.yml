@@ -7,6 +7,8 @@ traefik_compose_version: 2
 traefik_debug_enable: false
 traefik_log_level: "WARNING"
 
+traefik_image: "traefik"
+
 # Main configuration
 traefik_entrypoint_http_port: 80
 traefik_entrypoint_http_redirect_to_https: true
