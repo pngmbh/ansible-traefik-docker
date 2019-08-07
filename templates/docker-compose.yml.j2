@@ -24,7 +24,7 @@ services:
 {% endif %}
     networks:
       - {{ traefik_docker_network }}
-{% if traefik_dashboard_enable %}
+{% if traefik_dashboard_enable and not traefik_use_swarm %}
     labels:
       - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
       - "traefik.docker.network={{ traefik_docker_network }}"
@@ -44,9 +44,17 @@ services:
     restart: always
 {% else %}
     deploy:
+{% if traefik_dashboard_enable %}
+      labels:
+        - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
+        - "traefik.docker.network={{ traefik_docker_network }}"
+        - "traefik.backend=traefik"
+        - "traefik.frontend.rule=Host:traefik.{{ traefik_docker_domain | default(inventory_hostname) }}"
+        - "traefik.enable=true"
       placement:
         constraints:
           - node.role == manager
+{% endif %}
 {% endif %}
 
 networks:

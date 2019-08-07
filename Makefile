@@ -15,3 +15,6 @@ test: build-testimage
 		-w /tmp/${ROLENAME} \
 		${TESTIMAGENAME} \
 		molecule test $(SCENARIO) $(DEBUG_OPTS)
+
+debug: DEBUG_OPTS:=--destroy=never
+debug: build-testimage test
