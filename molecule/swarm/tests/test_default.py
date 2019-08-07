@@ -10,7 +10,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 def test_traefik_is_running_on_swarm(host):
     out = host.check_output(
         'docker ps --filter "label=traefik.backend=traefik"'
-        + ' --format {%raw%}"{{.Image}}"{%endraw%}')
+        + ' --format "{{.Image}}"')
     assert 'traefik:latest' == out
 
 
@@ -18,7 +18,7 @@ def test_example_is_running(host):
     # check that the test http server is running
     out = host.check_output(
         'docker ps --filter "label=test=webserver"'
-        + ' --format {%raw%}"{{.Image}}"{%endraw%}')
+        + ' --format "{{.Image}}"')
     assert out == 'deis/example-go'
 
 
