@@ -9,7 +9,7 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 def test_traefik_is_running_on_swarm(host):
     out = host.check_output(
-        'docker ps --filter "label=traefik.backend=traefik"'
+        'docker service ls'
         + ' --format "{{.Image}}"')
     assert out.startswith('traefik')
 
