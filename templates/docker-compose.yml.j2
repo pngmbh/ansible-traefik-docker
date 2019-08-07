@@ -42,6 +42,11 @@ services:
 {% if not traefik_use_swarm %}
     container_name: traefik
     restart: always
+{% else %}
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
 {% endif %}
 
 networks:
