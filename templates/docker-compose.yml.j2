@@ -24,7 +24,7 @@ services:
 {% endif %}
     networks:
       - {{ traefik_docker_network }}
-{% if traefik_dashboard_enable and not traefik_use_swarm %}
+{% if traefik_dashboard_enable %}
     labels:
       - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
       - "traefik.docker.network={{ traefik_docker_network }}"
