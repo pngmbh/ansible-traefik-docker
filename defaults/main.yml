@@ -41,4 +41,8 @@ traefik_consul_watch: true
 
 # Compose, or Swarm?
 traefik_use_swarm: false
+# Switch this on for multi-node swarm clusters.
+# With it on, traefik will *only* recognize docker swarm services,
+# not single containers.
+traefik_swarm_mode: false
 traefik_swarm_network_opts: "--attachable --driver=overlay"
