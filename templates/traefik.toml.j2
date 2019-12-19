@@ -30,9 +30,9 @@ defaultEntryPoints = ["https","http"]
 entryPoint = "traefik"
 {% endif %}
 
-[file]
-directory = "/conf.d"
-watch = true
+#[file]
+#directory = "/conf.d"
+#watch = true
 
 {% if traefik_docker_enable %}
 [docker]
