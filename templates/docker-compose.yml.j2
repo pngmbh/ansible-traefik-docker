@@ -2,6 +2,26 @@
 version: '{{ traefik_compose_version }}'
 
 services:
+{% if traefik_consul_enable %}
+  consul:
+    image: consul:1.6
+    command: agent -server -bootstrap-expect=1
+    volumes:
+      - consul-data:/consul/data
+    environment:
+      - CONSUL_LOCAL_CONFIG={"datacenter":"pn1","server":true}
+      - CONSUL_BIND_INTERFACE=eth0
+      - CONSUL_CLIENT_INTERFACE=eth0
+    deploy:
+      replicas: 1
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: on-failure
+    networks:
+      - traefik_lan
+{% endif %}
   traefik:
     image: {{ traefik_image }}:{{ traefik_version }}
     ports:
@@ -24,6 +44,7 @@ services:
 {% endif %}
     networks:
       - {{ traefik_docker_network }}
+      - traefik_lan
 {% if traefik_dashboard_enable %}
     labels:
       - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
@@ -35,15 +56,18 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - {{ traefik_directory }}/traefik.toml:/traefik.toml
-      - {{ traefik_directory }}/conf.d:/conf.d
+      # - {{ traefik_directory }}/conf.d:/conf.d
 {% if traefik_acme_enable %}
+{% if not traefik_consul_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
+{% endif %}
 {% endif %}
 {% if not traefik_use_swarm %}
     container_name: traefik
     restart: always
 {% else %}
     deploy:
+      mode: global
 {% if traefik_dashboard_enable %}
       labels:
         - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
@@ -58,5 +82,6 @@ services:
 {% endif %}
 
 networks:
+  traefik_lan:
   {{ traefik_docker_network }}:
     external: true
