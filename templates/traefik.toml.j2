@@ -30,9 +30,9 @@ defaultEntryPoints = ["https","http"]
 entryPoint = "traefik"
 {% endif %}
 
-[file]
-directory = "/conf.d"
-watch = true
+#[file]
+#directory = "/conf.d"
+#watch = true
 
 {% if traefik_docker_enable %}
 [docker]
@@ -48,7 +48,11 @@ swarmMode = true
 {% if traefik_acme_enable %}
 [acme]
 email = "{{ traefik_acme_email }}"
+{% if traefik_consul_enable %}
+storage = "traefik/acme/account"
+{% else %}
 storage = "acme.json"
+{% endif %}
 entryPoint = "https"
 {% if traefik_acme_use_staging_ca %}
 caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
