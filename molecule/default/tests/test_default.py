@@ -19,7 +19,7 @@ def test_traefik_is_running(host):
     out = host.check_output(
         'docker ps --filter "label=traefik.backend=traefik"'
         + ' --format "{{.Image}}"')
-    assert 'traefik' == out
+    assert out.startswith('traefik')
 
 
 def test_host_based_routing_via_traefik(host):
@@ -38,8 +38,14 @@ def test_host_based_routing_via_traefik(host):
     assert 'backend-testhttp' in data['backends']
     assert 'backend-traefik' in data['backends']
     assert 'frontends' in data
-    assert 'frontend-Host-testhttp-traefik-docker-local-0' in data['frontends']
-    assert 'frontend-Host-traefik-traefik-docker-local-1' in data['frontends']
+    assert (
+        'frontend-Host-testhttp-traefik-docker-local-0' in data['frontends'] or
+        'frontend-Host-testhttp-traefik-docker-local-1' in data['frontends']
+    )
+    assert (
+        'frontend-Host-traefik-traefik-docker-local-0' in data['frontends'] or
+        'frontend-Host-traefik-traefik-docker-local-1' in data['frontends']
+    )
 
     # check that we can access the test http server via traefik
     out = host.check_output(

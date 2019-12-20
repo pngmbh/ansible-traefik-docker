@@ -21,4 +21,5 @@
 - name: Pull Docker image
   docker_image:
     name: traefik
+    source: pull
     tag: "{{ traefik_version }}"

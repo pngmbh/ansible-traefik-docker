@@ -3,7 +3,7 @@ version: '{{ traefik_compose_version }}'
 
 services:
   traefik:
-    image: {{ traefik_image }}
+    image: {{ traefik_image }}:{{ traefik_version }}
     ports:
 {% if traefik_use_swarm %}
       - target: {{ traefik_entrypoint_http_port }}
