@@ -26,17 +26,17 @@ services:
     image: {{ traefik_image }}:{{ traefik_version }}
     ports:
 {% if traefik_use_swarm %}
-      - target: {{ traefik_entrypoint_http_port }}
+      - target: 80
         published: 80
         protocol: tcp
         mode: host
-      - target: {{ traefik_entrypoint_https_port }}
+      - target: 443
         published: 443
         protocol: tcp
         mode: host
 {% else %}
-      - "{{ traefik_entrypoint_http_port }}:80"
-      - "{{ traefik_entrypoint_https_port }}:443"
+      - "80:80"
+      - "443:443"
 {% endif %}
 {% if traefik_dashboard_enable and not traefik_use_swarm %}
     expose:
@@ -56,7 +56,6 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - {{ traefik_directory }}/traefik.toml:/traefik.toml
-      # - {{ traefik_directory }}/conf.d:/conf.d
 {% if traefik_acme_enable %}
 {% if not traefik_consul_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
