@@ -85,3 +85,8 @@ networks:
   traefik_lan:
   {{ traefik_docker_network }}:
     external: true
+
+{% if traefik_consul_enable %}
+volumes:
+  consul-data:
+{% endif %}
