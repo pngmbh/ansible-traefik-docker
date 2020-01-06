@@ -1,7 +1,20 @@
 ---
 - name: Create traefik docker network (Swarm)
-  command: "docker network create {{ traefik_swarm_network_opts }} {{ traefik_docker_network }}"
-  ignore_errors: true
+  docker_network:
+    name: "{{ traefik_docker_network }}"
+    state: present
+    attachable: "{{ traefik_swarm_network_attachable | bool }}"
+    driver: "{{ traefik_swarm_network_driver }}"
+
+- name: Install dependencies
+  pip:
+    name:
+      - jsondiff==1.2.0
+      - pyyaml==5.2
 
 - name: Start Traefik (Swarm)
-  command: docker stack deploy --compose-file={{ traefik_compose }} traefik
+  docker_stack:
+    state: present
+    name: traefik
+    compose:
+      - "{{ traefik_compose }}"
