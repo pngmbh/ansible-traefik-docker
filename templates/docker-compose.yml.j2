@@ -50,7 +50,7 @@ services:
       - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
       - "traefik.docker.network={{ traefik_docker_network }}"
       - "traefik.backend=traefik"
-      - "traefik.frontend.rule=Host:traefik.{{ traefik_docker_domain | default(inventory_hostname) }}"
+      - "traefik.frontend.rule=Host:{{ traefik_dashboard_subdomain }}.{{ traefik_docker_domain | default(inventory_hostname) }}"
       - "traefik.enable=true"
 {% endif %}
     volumes:
@@ -73,7 +73,7 @@ services:
         - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
         - "traefik.docker.network={{ traefik_docker_network }}"
         - "traefik.backend=traefik"
-        - "traefik.frontend.rule=Host:traefik.{{ traefik_docker_domain | default(inventory_hostname) }}"
+        - "traefik.frontend.rule=Host:{{ traefik_dashboard_subdomain }}.{{ traefik_docker_domain | default(inventory_hostname) }}"
         - "traefik.enable=true"
       placement:
         constraints:
