@@ -10,10 +10,7 @@ traefik_log_level: "WARNING"
 traefik_image: "traefik"
 
 # Main configuration
-traefik_entrypoint_http_port: 80
-traefik_entrypoint_http_redirect_to_https: true
-traefik_entrypoint_https_port: 443
-traefik_docker_network: "traefik"
+traefik_docker_network: "public"
 
 # Dashboard
 traefik_dashboard_enable: true
@@ -23,7 +20,6 @@ traefik_dashboard_basicauth_enable: true
 traefik_dashboard_basicauth_users: []
 
 # Docker
-traefik_docker_enable: true
 # traefik_docker_domain: "mydomain.org" (defaults to inventory_hostname)
 traefik_docker_expose_by_default: false
 
