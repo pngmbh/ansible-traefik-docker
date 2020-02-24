@@ -1,4 +1,5 @@
 import os
+import pytest
 import json
 
 import testinfra.utils.ansible_runner
@@ -7,19 +8,16 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
     os.environ['MOLECULE_INVENTORY_FILE']).get_hosts('all')
 
 
-def test_traefik_is_running_on_swarm(host):
+@pytest.mark.parametrize("service", [
+    ("traefik"),
+    ("consul"),
+    ("deis/example-go")
+])
+def test_service_is_running_on_swarm(host, service):
     out = host.check_output(
         'docker service ls'
         + ' --format "{{.Image}}"')
-    assert out.startswith('traefik')
-
-
-def test_example_is_running(host):
-    # check that the test http server is running
-    out = host.check_output(
-        'docker ps --filter "label=test=webserver"'
-        + ' --format "{{.Image}}"')
-    assert out == 'deis/example-go'
+    assert service in out
 
 
 def test_traefik_found_container(host):

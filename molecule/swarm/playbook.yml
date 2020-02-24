@@ -4,13 +4,18 @@
   roles:
     - role: ansible-traefik-docker
   tasks:
+    - name: Get docker networks
+      command: docker network ls
+      register: __networks
+    - name: Show networks
+      debug:
+        var: __networks.stdout_lines
     - name: start test web server
-      docker_container:
-        name: testhttp
+      docker_swarm_service:
+        name: http
         image: deis/example-go
-        state: started
         networks:
-          - name: "{{ traefik_docker_network }}"
+          - "{{ traefik_docker_network }}"
         labels:
           test: webserver
           traefik.enable: "true"
@@ -18,6 +23,8 @@
   vars:
     traefik_version: "v1.7.7"
     traefik_use_swarm: true
+    traefik_swarm_mode: true
+    traefik_consul_enable: true
     traefik_compose_version: 3.2
     traefik_docker_network: "traefik"
     traefik_docker_domain: 'traefik-swarm.docker.local'
