@@ -17,7 +17,7 @@ services:
 {% if traefik_dashboard_enable %}
       - "--api"
       - "--api.entrypoint=traefik"
-      - "--entrypoints=Name:traefik Address::{{ traefik_dashboard_entrypoint_port }} Auth.Basic.Users:{{ traefik_dashboard_basicauth_users[0] }}"
+      - "--entrypoints=Name:traefik Address::{{ traefik_dashboard_entrypoint_port }} {%if traefik_dashboard_basicauth_enable %}Auth.Basic.Users:{{ traefik_dashboard_basicauth_users[0] }}{% endif %}"
 {% endif %}
       - "--retry"
       - "--loglevel={{ traefik_log_level }}"
@@ -75,7 +75,9 @@ services:
       - CONSUL_BIND_INTERFACE=eth0
     deploy:
       labels:
+{% if traefik_dashboard_basicauth_enable %}
         traefik.frontend.auth.basic.users: "{{ traefik_dashboard_basicauth_users[0] }}"
+{% endif %}
         traefik.port: "8500"
         traefik.enable: "true"
       replicas: 1
