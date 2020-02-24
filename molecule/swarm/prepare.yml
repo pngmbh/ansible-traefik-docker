@@ -27,7 +27,6 @@
     docker_package: "docker-{{ docker_edition }}"
     docker_package_version: "17.03.2.ce-1.el7.centos"
     docker_hosts:
-      - "tcp://0.0.0.0:2376"
       - "unix:///var/run/docker.sock"
     pip_install_packages:
       - name: docker

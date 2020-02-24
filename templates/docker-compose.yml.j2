@@ -80,10 +80,13 @@ services:
 {% endif %}
         traefik.port: "8500"
         traefik.enable: "true"
+      mode: replicated
       replicas: 1
+{% if traefik_consul_placement %}
       placement:
         constraints:
-          - node.role == manager
+          - {{ traefik_consul_placement }}
+{% endif %}
       restart_policy:
         condition: on-failure
     networks:
