@@ -80,7 +80,7 @@ services:
 {% endif %}
         traefik.port: "8500"
         traefik.enable: "true"
-      replicas: 1
+      mode: global
       placement:
         constraints:
           - node.role == manager
