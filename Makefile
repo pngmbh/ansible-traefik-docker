@@ -13,6 +13,8 @@ test: build-testimage
 		-v '${PWD}':/tmp/${ROLENAME} \
 		-v /var/run/docker.sock:/var/run/docker.sock \
 		-w /tmp/${ROLENAME} \
+		--env HCLOUD_TOKEN \
+		--env CIRCLE_BUILD_NUM \
 		${TESTIMAGENAME} \
 		molecule test $(SCENARIO) $(DEBUG_OPTS)
 

@@ -9,7 +9,7 @@ jobs:
       - checkout
       - run:
           name: Run tests
-          command: make test SCENARIO="--scenario-name swarm" DEBUG_OPTS="--destroy=never"
+          command: make test SCENARIO="--scenario-name swarm"
   test_default:
     machine:
       image: circleci/classic:latest
