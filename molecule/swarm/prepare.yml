@@ -28,6 +28,9 @@
     docker_package_version: "17.03.2.ce-1.el7.centos"
     docker_hosts:
       - "unix:///var/run/docker.sock"
+    docker_service_state: stopped
+    docker_service_enabled: false
+    docker_restart_handler_state: stopped
     pip_install_packages:
       - name: docker
       - name: docker-compose
