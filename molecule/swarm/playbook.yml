@@ -25,6 +25,7 @@
     traefik_use_swarm: true
     traefik_swarm_mode: true
     traefik_consul_enable: true
+    traefik_consul_placement: 'node.platform.os == linux'
     traefik_compose_version: 3.2
     traefik_docker_network: "traefik"
     traefik_docker_domain: 'traefik-swarm.docker.local'
