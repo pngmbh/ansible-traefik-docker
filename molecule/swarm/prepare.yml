@@ -1,6 +1,17 @@
 ---
 - name: Prepare
   hosts: all
+  pre_tasks:
+    - name: Remove python yum packages that conflict
+      # most of these are dependencies of cloudinit, on the hetzner machine
+      package:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - PyYAML
+        - python-requests
+        - python-chardet
+        - python-urllib3
   roles:
     - role: geerlingguy.repo-epel
     - role: geerlingguy.pip
