@@ -35,11 +35,13 @@ def test_traefik_found_container(host):
     assert 'frontends' in data
     assert (
         'frontend-Host-testhttp-' + base_host + '-0' in data['frontends'] or
-        'frontend-Host-testhttp-' + base_host + '-1' in data['frontends']
+        'frontend-Host-testhttp-' + base_host + '-1' in data['frontends'] or
+        'frontend-Host-testhttp-' + base_host + '-2' in data['frontends']
     )
     assert (
         'frontend-Host-traefik-' + base_host + '-0' in data['frontends'] or
-        'frontend-Host-traefik-' + base_host + '-1' in data['frontends']
+        'frontend-Host-traefik-' + base_host + '-1' in data['frontends'] or
+        'frontend-Host-traefik-' + base_host + '-2' in data['frontends']
     )
 
     # check that we can access the test http server via traefik
