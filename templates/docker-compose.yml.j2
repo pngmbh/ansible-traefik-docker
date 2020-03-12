@@ -59,7 +59,7 @@ services:
       - "--consul.endpoint=consul:8500"
       - "--consul.prefix=traefik"
   consul:
-    image: consul:1.6
+    image: consul:{{ traefik_consul_version | default('1.7') }}
     command:
       - "agent"
       - "-server"
