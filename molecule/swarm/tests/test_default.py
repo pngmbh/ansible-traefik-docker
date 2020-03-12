@@ -10,7 +10,6 @@ testinfra_hosts = testinfra.utils.ansible_runner.AnsibleRunner(
 
 @pytest.mark.parametrize("service", [
     ("traefik"),
-    ("consul"),
     ("deis/example-go")
 ])
 def test_service_is_running_on_swarm(host, service):
