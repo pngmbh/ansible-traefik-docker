@@ -5,106 +5,27 @@ services:
 {% if traefik_consul_enable %}
   traefik_init:
     image: {{ traefik_image }}:{{ traefik_version }}
-    networks:
-      - traefik_lan
     deploy:
       restart_policy:
         condition: on-failure
-    depends_on:
-      - consul
     command:
       - "storeconfig"
-{% if traefik_dashboard_enable %}
-      - "--api"
-      - "--api.entrypoint=traefik"
-      - "--entrypoints=Name:traefik Address::{{ traefik_dashboard_entrypoint_port }} {%if traefik_dashboard_basicauth_enable %}Auth.Basic.Users:{{ traefik_dashboard_basicauth_users[0] }}{% endif %}"
-{% endif %}
-      - "--retry"
-      - "--loglevel={{ traefik_log_level }}"
-{% if traefik_debug_enable %}
-      - "--debug"
-{% endif %}
-      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
-      - "--entrypoints=Name:https Address::443 TLS"
-      - "--defaultentrypoints=http,https"
-      - "--docker"
-      - "--docker.endpoint=unix:///var/run/docker.sock"
-      - "--docker.domain={{ traefik_docker_domain | default(inventory_hostname) }}"
-      - "--docker.watch=true"
-{% if traefik_docker_expose_by_default %}
-      - "--docker.exposedbydefault"
-{% endif %}
-{% if traefik_use_swarm and traefik_swarm_mode %}
-      - "--docker.swarmmode"
-{% endif %}
-{% if traefik_acme_enable %}
-      - "--acme"
-      - "--acme.email={{ traefik_acme_email }}"
-{% if traefik_consul_enable %}
-      - "--acme.storage=traefik/acme/account"
-{% else %}
-      - "--acme.storage=acme.json"
-{% endif %}
-      - "--acme.entrypoint=https"
-{% if traefik_acme_use_staging_ca %}
-      - "--acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory"
-{% endif %}
-{% if traefik_acme_autocreate_from_host %}
-      - "--acme.onhostrule"
-{% endif %}
-      - "--acme.httpchallenge"
-      - "--acme.httpchallenge.entrypoint=http"
-{% endif %}
-      - "--consul"
-      - "--consul.endpoint=consul:8500"
-      - "--consul.prefix=traefik"
-  consul:
-    image: consul:{{ traefik_consul_version | default('1.7') }}
-    command:
-      - "agent"
-      - "-server"
-      - "-ui"
-      - "-node=traefik-consul"
-      - "-bootstrap-expect=1"
-      - "-log-level=debug"
-      - "-client=0.0.0.0"
+      - "--configfile /traefik.toml"
     volumes:
-      - consul-data:/consul/data
-    environment:
-      - CONSUL_LOCAL_CONFIG={"datacenter":"pn1"}
-      - CONSUL_BIND_INTERFACE=eth0
-    deploy:
-      labels:
-{% if traefik_dashboard_basicauth_enable %}
-        traefik.frontend.auth.basic.users: "{{ traefik_dashboard_basicauth_users[0] }}"
-{% endif %}
-        traefik.port: "8500"
-        traefik.enable: "true"
-      mode: replicated
-      replicas: 1
-{% if traefik_consul_placement %}
-      placement:
-        constraints:
-          - {{ traefik_consul_placement }}
-{% endif %}
-      restart_policy:
-        condition: on-failure
-    networks:
-      - traefik_lan
+      - {{ traefik_directory }}/traefik.toml:/traefik.toml:ro
 {% endif %}
   traefik:
     image: {{ traefik_image }}:{{ traefik_version }}
 {% if traefik_consul_enable %}
     command:
       - "--consul"
-      - "--consul.endpoint=consul:8500"
+      - "--consul.endpoint=169.254.1.1:8500"
       - "--consul.prefix=traefik"
 {% if traefik_consul_watch %}
       - "--consul.watch"
 {% endif %}
     depends_on:
       - traefik_init
-      - consul
 {% endif %}
     ports:
 {% if traefik_use_swarm %}
@@ -120,20 +41,13 @@ services:
       - "80:80"
       - "443:443"
 {% endif %}
-{% if traefik_dashboard_enable and not traefik_use_swarm %}
-    expose:
-      - {{ traefik_dashboard_entrypoint_port }}
-{% endif %}
     networks:
       - {{ traefik_docker_network }}
-      - traefik_lan
 {% if traefik_dashboard_enable %}
     labels:
-      - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
-      - "traefik.docker.network={{ traefik_docker_network }}"
-      - "traefik.backend=traefik"
-      - "traefik.frontend.rule=Host:{{ traefik_dashboard_subdomain }}.{{ traefik_docker_domain | default(inventory_hostname) }}"
-      - "traefik.enable=true"
+{% for label in traefik_dashboard_labels %}
+      - {{ label }}
+{% endfor %}
 {% endif %}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -141,33 +55,25 @@ services:
       - {{ traefik_directory }}/traefik.toml:/traefik.toml
 {% if traefik_acme_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
-{% endif %}
-{% endif %}
+{%- endif -%}
+{%- endif -%}
 {% if not traefik_use_swarm %}
     container_name: traefik
     restart: always
 {% else %}
     deploy:
       mode: global
-{% if traefik_dashboard_enable %}
-      labels:
-        - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
-        - "traefik.docker.network={{ traefik_docker_network }}"
-        - "traefik.backend=traefik"
-        - "traefik.frontend.rule=Host:{{ traefik_dashboard_subdomain }}.{{ traefik_docker_domain | default(inventory_hostname) }}"
-        - "traefik.enable=true"
       placement:
         constraints:
           - node.role == manager
+{% if traefik_dashboard_enable %}
+      labels:
+{% for label in traefik_dashboard_labels %}
+        - {{ label }}
+{% endfor %}
 {% endif %}
 {% endif %}
 
 networks:
-  traefik_lan:
   {{ traefik_docker_network }}:
     external: true
-
-{% if traefik_consul_enable %}
-volumes:
-  consul-data:
-{% endif %}

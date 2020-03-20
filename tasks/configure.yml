@@ -6,10 +6,17 @@
   when: not traefik_consul_enable
   notify: restart traefik
 
+- name: Render traefik config for seeding
+  template:
+    src: traefik.toml.j2
+    dest: "{{ traefik_directory }}/traefik.toml"
+  when: traefik_consul_enable
+
 - name: Render docker-compose config
   template:
     src: docker-compose.yml.j2
     dest: "{{ traefik_compose }}"
+    validate: "docker-compose -f %s config -q"
 
 - name: Ensure acme config
   file:
