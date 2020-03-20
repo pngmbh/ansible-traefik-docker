@@ -6,3 +6,15 @@
     prune: true
     compose:
       - "{{ traefik_compose }}"
+
+- name: Ensure Traefik started (80)
+  wait_for:
+    host: 0.0.0.0
+    port: 80
+    msg: Traefik is not listening on port 80
+
+- name: Ensure Traefik started (443)
+  wait_for:
+    host: 0.0.0.0
+    port: 443
+    msg: Traefik is not listening on port 443
