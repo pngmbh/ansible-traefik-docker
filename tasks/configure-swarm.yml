@@ -3,7 +3,7 @@
   docker_stack:
     state: present
     name: traefik
-    prune: yes
+    prune: true
     compose:
       - "{{ traefik_compose }}"
 
