@@ -7,7 +7,7 @@ lint:
   name: yamllint
 platforms:
   - name: ansible-traefik-docker-test-${CIRCLE_BUILD_NUM:-111}
-    server_type: cx11
+    server_type: cx21
     image: centos-7
 provisioner:
   name: ansible
