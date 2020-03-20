@@ -8,6 +8,12 @@ build-testimage:
 SCENARIO?=--all
 DEBUG_OPTS?=
 
+test-local:
+	# FIXME: this should be useful for localhost as it caches deps and molecule
+	#        but it does not work on CircleCI
+	# -v '${HOME}/.ansible_galaxy':/root/.ansible_galaxy \
+	# -v '${HOME}/.cache/molecule':/root/.cache/molecule \
+
 test: build-testimage
 	docker run --rm -it \
 		-v '${PWD}':/tmp/${ROLENAME} \
