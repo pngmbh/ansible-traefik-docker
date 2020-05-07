@@ -6,11 +6,17 @@ services:
   traefik_init:
     image: {{ traefik_image }}:{{ traefik_version }}
     deploy:
+      placement:
+        constraints:
+          - node.role == manager
       restart_policy:
         condition: on-failure
     command:
       - "storeconfig"
-      - "--configfile /traefik.toml"
+      - "--consul"
+      - "--consul.endpoint={{ traefik_consul_endpoint }}"
+      - "--consul.prefix=traefik"
+      - "--configfile=/traefik.toml"
     volumes:
       - {{ traefik_directory }}/traefik.toml:/traefik.toml:ro
 {% endif %}
@@ -19,7 +25,7 @@ services:
 {% if traefik_consul_enable %}
     command:
       - "--consul"
-      - "--consul.endpoint={{ traefik_consul_endpoint }}:8500"
+      - "--consul.endpoint={{ traefik_consul_endpoint }}"
       - "--consul.prefix=traefik"
 {% if traefik_consul_watch %}
       - "--consul.watch"
