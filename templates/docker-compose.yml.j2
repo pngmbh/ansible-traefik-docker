@@ -19,7 +19,7 @@ services:
 {% if traefik_consul_enable %}
     command:
       - "--consul"
-      - "--consul.endpoint=169.254.1.1:8500"
+      - "--consul.endpoint={{ traefik_consul_endpoint }}:8500"
       - "--consul.prefix=traefik"
 {% if traefik_consul_watch %}
       - "--consul.watch"
