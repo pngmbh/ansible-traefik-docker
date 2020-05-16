@@ -5,3 +5,5 @@
   version: 1.3.0
 - src: geerlingguy.docker
   version: 2.5.2
+- src: https://github.com/ansible-community/ansible-consul
+  name: brianshumate.consul
