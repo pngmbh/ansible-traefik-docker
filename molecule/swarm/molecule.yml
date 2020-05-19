@@ -9,6 +9,8 @@ platforms:
   - name: ansible-traefik-docker-test-${CIRCLE_BUILD_NUM:-111}
     server_type: cx21
     image: centos-7
+    groups:
+      - consul_instances
 provisioner:
   name: ansible
   options:

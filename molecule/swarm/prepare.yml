@@ -2,6 +2,11 @@
 - name: Prepare
   hosts: all
   pre_tasks:
+    - name: Install tools
+      yum:
+        name:
+          - wget
+          - unzip
     - name: Remove python yum packages that conflict
       # most of these are dependencies of cloudinit, on the hetzner machine
       package:
@@ -38,6 +43,10 @@
           - name: docker-compose
             version: "1.24.1"
     - role: geerlingguy.docker
+    - role: brianshumate.consul
+      vars:
+        consul_node_role: bootstrap
+        consul_client_address: "{{ hostvars[inventory_hostname]['ansible_default_ipv4']['address'] }}"
   tasks:
     - name: Init swarm
       command: docker swarm init
