@@ -19,12 +19,17 @@ def test_service_is_running_on_swarm(host, service):
     assert service in out
 
 
-def test_traefik_found_container(host):
+def test_traefik_found_container(host, capsys):
     # check that traefik found the test http server
-    out = host.check_output(
-        'curl -L -k -v -s -H "Host:traefik.traefik-swarm.docker.local"'
+    traefik = host.run(
+        'curl -L -k -s -H "Host:traefik.traefik-swarm.docker.local"'
         + ' https://127.0.0.1:443/api/providers/docker')
-    data = json.loads(out)
+
+    # with capsys.disabled():
+    #     print(traefik.stdout)
+    #     print(traefik.stderr)
+
+    data = json.loads(traefik.stdout)
 
     base_host = 'traefik-swarm-docker-local'
 
@@ -44,7 +49,7 @@ def test_traefik_found_container(host):
     )
 
     # check that we can access the test http server via traefik
-    out = host.check_output(
-        'curl -L -k -v -s -H "Host:testhttp.traefik-swarm.docker.local"'
+    deis = host.run(
+        'curl -L -k -s -H "Host:testhttp.traefik-swarm.docker.local"'
         + ' https://127.0.0.1:443')
-    assert out == 'Powered by Deis'
+    assert deis.stdout == 'Powered by Deis\n'
