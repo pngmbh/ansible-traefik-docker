@@ -3,13 +3,13 @@ version: 2
 jobs:
   test_swarm:
     machine:
-      image: circleci/classic:latest
+      image: ubuntu-1604:202004-01
       docker_layer_caching: false
     steps:
       - checkout
       - run:
           name: Run tests
-          command: make test SCENARIO="--scenario-name swarm" DEBUG_OPTS="--destroy=never"
+          command: make test SCENARIO="--scenario-name swarm"
   test_default:
     machine:
       image: circleci/classic:latest
