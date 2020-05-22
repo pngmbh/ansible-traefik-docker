@@ -61,8 +61,8 @@ services:
       - {{ traefik_directory }}/traefik.toml:/traefik.toml
 {% if traefik_acme_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
-{%- endif -%}
-{%- endif -%}
+{% endif %}
+{% endif %}
 {% if not traefik_use_swarm %}
     container_name: traefik
     restart: always
