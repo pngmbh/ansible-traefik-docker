@@ -49,7 +49,7 @@ services:
 {% endif %}
     networks:
       - {{ traefik_docker_network }}
-{% if traefik_dashboard_enable %}
+{% if not traefik_use_swarm and traefik_dashboard_enable %}
     labels:
 {% for label in traefik_dashboard_labels %}
       - {{ label }}
@@ -61,8 +61,8 @@ services:
       - {{ traefik_directory }}/traefik.toml:/traefik.toml
 {% if traefik_acme_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
-{%- endif -%}
-{%- endif -%}
+{% endif %}
+{% endif %}
 {% if not traefik_use_swarm %}
     container_name: traefik
     restart: always

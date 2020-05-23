@@ -1,0 +1,53 @@
+---
+- name: Prepare
+  hosts: all
+  pre_tasks:
+    - name: Install tools
+      yum:
+        name:
+          - wget
+          - unzip
+    - name: Remove python yum packages that conflict
+      # most of these are dependencies of cloudinit, on the hetzner machine
+      package:
+        name: "{{ item }}"
+        state: absent
+      loop:
+        - PyYAML
+        - python-requests
+        - python-chardet
+        - python-urllib3
+  roles:
+    - role: geerlingguy.repo-epel
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: pip
+            version: 19.3.1
+    - role: geerlingguy.pip
+      vars:
+        pip_install_packages:
+          - name: pyyaml
+          - name: jsondiff
+          - name: docker-py
+            state: absent
+          - name: chardet
+            version: "3.0.0"
+            state: present
+          - name: urllib3
+            version: "1.23"
+          - name: requests
+            version: "2.21.0"
+            state: present
+          - name: docker
+          - name: docker-compose
+            version: "1.24.1"
+    - role: geerlingguy.docker
+  tasks:
+    - name: Init swarm
+      command: docker swarm init
+  vars:
+    docker_package: "docker-{{ docker_edition }}"
+    docker_package_version: "17.03.2.ce-1.el7.centos"
+    docker_hosts:
+      - "unix:///var/run/docker.sock"
