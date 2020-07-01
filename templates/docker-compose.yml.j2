@@ -49,7 +49,7 @@ services:
 {% endif %}
     networks:
       - {{ traefik_docker_network }}
-{% if not traefik_use_swarm and traefik_dashboard_enable %}
+{% if not traefik_swarm_mode and traefik_dashboard_enable %}
     labels:
 {% for label in traefik_dashboard_labels %}
       - {{ label }}
@@ -72,7 +72,7 @@ services:
       placement:
         constraints:
           - node.role == manager
-{% if traefik_dashboard_enable %}
+{% if traefik_swarm_mode and traefik_dashboard_enable %}
       labels:
 {% for label in traefik_dashboard_labels %}
         - {{ label }}

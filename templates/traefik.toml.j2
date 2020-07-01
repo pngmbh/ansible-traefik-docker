@@ -26,6 +26,7 @@ defaultEntryPoints = ["https","http"]
 {% if traefik_dashboard_enable %}
 [api]
 entryPoint = "traefik"
+dashboard = true
 {% endif %}
 
 [docker]
