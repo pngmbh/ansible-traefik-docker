@@ -1,7 +1,12 @@
 ---
-traefik_dashboard_labels:
+_traefik_dashboard_labels:
   - "traefik.port={{ traefik_dashboard_entrypoint_port }}"
   - "traefik.docker.network={{ traefik_docker_network }}"
   - "traefik.backend=traefik"
   - "traefik.frontend.rule=Host:{{ traefik_dashboard_subdomain }}.{{ traefik_docker_domain | default(inventory_hostname) }}"
   - "traefik.enable=true"
+
+_traefik_dashboard_fwdauth_labels:
+  - "traefik.frontend.auth.forward.address: {{ traefik_dashboard_fwdauth_server }}"
+  - "traefik.frontend.auth.forward.authResponseHeaders=X-Auth-User,X-Auth-Group"
+  - "traefik.frontend.auth.forward.trustForwardHeader=true"
