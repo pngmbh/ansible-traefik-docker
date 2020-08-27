@@ -16,12 +16,13 @@ traefik_docker_network: "public"
 traefik_dashboard_enable: true
 traefik_dashboard_entrypoint_port: 8080
 traefik_dashboard_subdomain: "traefik"
+traefik_dashboard_fqdn: "{{ traefik_dashboard_subdomain }}.{{ traefik_docker_domain }}"
 traefik_dashboard_basicauth_enable: true
 traefik_dashboard_basicauth_users: []
 traefik_dashboard_fwdauth_server: ""
 
 # Docker
-# traefik_docker_domain: "mydomain.org" (defaults to inventory_hostname)
+traefik_docker_domain: "{{ inventory_hostname }}"
 traefik_docker_expose_by_default: false
 
 # Enable automatic certificates from Let's Encrypt
