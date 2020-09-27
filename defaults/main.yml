@@ -45,3 +45,7 @@ traefik_use_swarm: false
 traefik_swarm_mode: false
 traefik_swarm_network_driver: "overlay"
 traefik_swarm_network_attachable: true
+
+# Whatever Ansible needs to execute this role
+# If you're doing it otherwise, you can set this to false
+traefik_manage_ansible_dependencies: true

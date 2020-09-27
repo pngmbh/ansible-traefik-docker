@@ -15,6 +15,7 @@
         name:
           - jsondiff==1.2.0
           - pyyaml==5.2
+      when: traefik_manage_ansible_dependencies
 
     - name: Create traefik docker network (Swarm)
       docker_network:
