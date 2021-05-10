@@ -1,4 +1,16 @@
 ---
+- name: Labels include fwd auth
+  set_fact:
+    traefik_dashboard_labels: "{{ _traefik_dashboard_labels + _traefik_dashboard_fwdauth_labels }}"
+  when:
+    - traefik_dashboard_fwdauth_server|length > 0
+
+- name: Labels don't include fwd auth
+  set_fact:
+    traefik_dashboard_labels: "{{ _traefik_dashboard_labels }}"
+  when:
+    - traefik_dashboard_fwdauth_server|length == 0
+
 - name: Render traefik config
   template:
     src: traefik.toml.j2
