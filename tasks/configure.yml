@@ -28,7 +28,7 @@
   template:
     src: docker-compose.yml.j2
     dest: "{{ traefik_compose }}"
-    validate: "docker-compose -f %s config -q"
+    validate: "{{ traefik_docker_compose_path }} -f %s config -q"
 
 - name: Ensure acme config
   file:
