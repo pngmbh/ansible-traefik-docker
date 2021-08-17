@@ -34,6 +34,7 @@ endpoint = "unix:///var/run/docker.sock"
 domain = "{{ traefik_docker_domain | default(inventory_hostname) }}"
 watch = true
 exposedByDefault = {{ traefik_docker_expose_by_default | lower }}
+constraints = ["tag!=quantum-monitoring"]
 {% if traefik_use_swarm and traefik_swarm_mode %}
 swarmMode = true
 {% endif %}
