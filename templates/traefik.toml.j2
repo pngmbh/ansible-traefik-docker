@@ -7,10 +7,23 @@ defaultEntryPoints = ["https","http"]
 [entryPoints]
   [entryPoints.http]
   address = ":80"
+
+{% if traefik_loadbalancer_network != "" %}
+    [entryPoints.http.proxyProtocol]
+    insecure = false
+    trustedIPs = ["{{ traefik_loadbalancer_network }}", "{{ _docker_network_cidr }}"]
+{% endif %}
+
     [entryPoints.http.redirect]
     entryPoint = "https"
   [entryPoints.https]
   address = ":443"
+{% if traefik_loadbalancer_network != "" %}
+    [entryPoints.https.proxyProtocol]
+    insecure = false
+    trustedIPs = ["{{ traefik_loadbalancer_network }}", "{{ _docker_network_cidr }}"]
+{% endif %}
+
     [entryPoints.https.tls]
 {% if traefik_dashboard_enable %}
   [entryPoints.traefik]

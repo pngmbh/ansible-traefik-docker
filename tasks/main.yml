@@ -3,26 +3,12 @@
 
 - include: install.yml
 
+- include: install-network.yml
+
 - include: configure.yml
 
 - include_tasks: configure-compose.yml
   when: not traefik_use_swarm
 
-- name: Swarm Setup
-  block:
-    - name: Install dependencies
-      pip:
-        name:
-          - jsondiff==1.2.0
-          - pyyaml==5.2
-      when: traefik_manage_ansible_dependencies
-
-    - name: Create traefik docker network (Swarm)
-      docker_network:
-        name: "{{ traefik_docker_network }}"
-        state: present
-        attachable: "{{ traefik_swarm_network_attachable | bool }}"
-        driver: "{{ traefik_swarm_network_driver }}"
-
-    - include_tasks: configure-swarm.yml
+- include_tasks: configure-swarm.yml
   when: traefik_use_swarm
