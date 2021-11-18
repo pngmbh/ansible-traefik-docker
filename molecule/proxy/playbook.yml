@@ -1,9 +1,16 @@
 ---
 - name: Converge
   hosts: all
+  vars:
+    ansible_python_interpreter: /opt/python/bin/python
   roles:
     - role: ansible_traefik_docker
       vars:
+        # this is done in prepare.yml
+        traefik_manage_ansible_dependencies: false
+        traefik_docker_compose_path: /opt/bin/docker-compose
+        # give it a network
+        traefik_loadbalancer_network: "10.10.10.0/24"
         traefik_version: "v1.7"
         traefik_use_swarm: true
         traefik_swarm_mode: true
@@ -12,11 +19,6 @@
         traefik_docker_domain: 'traefik-swarm.docker.local'
         traefik_acme_enable: false
         traefik_dashboard_basicauth_enable: false
-  pre_tasks:
-    - name: Install wget
-      yum:
-        name:
-          - wget
   tasks:
     - name: Get docker networks
       command: docker network ls

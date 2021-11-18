@@ -6,7 +6,7 @@ driver:
 lint:
   name: yamllint
 platforms:
-  - name: ansible-traefik-docker-swarm-consul-${CIRCLE_BUILD_NUM:-111}
+  - name: ansible-traefik-docker-swarm-consul-${RUN_ID:-111}
     server_type: cx21
     image: centos-7
     groups:

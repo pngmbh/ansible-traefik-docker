@@ -20,9 +20,6 @@
           - name: docker
           - name: docker-compose
     - role: geerlingguy.docker
-  tasks:
-    - name: Init swarm
-      command: docker swarm init
   vars:
     docker_package: "docker-{{ docker_edition }}"
     docker_package_version: "17.03.2.ce-1.el7.centos"
