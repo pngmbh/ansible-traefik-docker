@@ -11,5 +11,5 @@ WORKDIR /tmp/ansible_traefik_docker
 ADD . .
 
 # set `molecule test` as the entrypoint
-ENTRYPOINT [ "molecule", "test" ]
-CMD [""]
+ENTRYPOINT [ "molecule"]
+CMD ["test"]

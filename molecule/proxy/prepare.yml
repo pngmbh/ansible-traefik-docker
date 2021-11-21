@@ -1,0 +1,42 @@
+---
+- name: Prepare
+  hosts: all
+  gather_facts: false
+  become: true
+  vars:
+    ansible_python_interpreter: /opt/python/bin/python
+  tasks:
+    - name: Install Python/PIP
+      include_role:
+        name: instrumentisto.coreos-bootstrap
+    - name: Init swarm
+      raw: docker swarm init
+  post_tasks:
+    # this is a replica of an internal ansible role
+    - name: Install jsondiff, pyyaml, docker
+      pip:
+        name:
+          - jsondiff==1.2.0
+          - pyyaml==5.3.1
+          - docker==4.4.4
+        executable: /opt/python/bin/pip
+    - name: "Create directories"
+      become: true
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: core
+        group: core
+        mode: 0755
+      loop:
+        # This is automatically in the path
+        - /opt/bin
+        - /opt/traefik
+        - /opt/pngmbh
+    - name: Install docker-compose
+      get_url:
+        url: https://github.com/docker/compose/releases/download/1.27.4/docker-compose-Linux-x86_64
+        dest: /opt/bin/docker-compose
+        mode: 0755
+        owner: core
+        group: core
