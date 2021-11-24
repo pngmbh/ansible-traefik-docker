@@ -1,0 +1,4 @@
+---
+- name: instrumentisto.coreos-bootstrap
+  src: https://github.com/instrumentisto/ansible-coreos-bootstrap.git
+  version: master

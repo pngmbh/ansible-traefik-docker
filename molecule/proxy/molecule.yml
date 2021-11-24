@@ -2,24 +2,23 @@
 dependency:
   name: galaxy
 driver:
-  name: hetznercloud
+  name: docker
 lint:
   name: yamllint
 platforms:
-  - name: ansible-traefik-docker-swarm-consul-${RUN_ID:-111}
-    server_type: cx21
-    image: centos-7
-    groups:
-      - consul_instances
+  - name: instance
+    image: "ghcr.io/luzilla/flatcar:stable"
+    command: ${MOLECULE_DOCKER_COMMAND:-""}
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    privileged: true
+    pre_build_image: true
 provisioner:
   name: ansible
-  options:
-    diff: false
-    v: true
   lint:
     name: ansible-lint
 scenario:
-  name: swarm
+  name: proxy
   test_sequence:
     - lint
     - destroy

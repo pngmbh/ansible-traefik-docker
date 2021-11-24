@@ -1,9 +1,4 @@
 ---
-- name: Create traefik docker network
-  docker_network:
-    name: "{{ traefik_docker_network }}"
-    state: present
-
 - name: Start traefik
   docker_compose:
     state: present

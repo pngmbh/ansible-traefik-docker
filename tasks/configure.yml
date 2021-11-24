@@ -15,6 +15,7 @@
   template:
     src: traefik.toml.j2
     dest: "{{ traefik_directory }}/traefik.toml"
+    mode: 0644
   when: not traefik_consul_enable
   notify: restart traefik
 
@@ -22,12 +23,14 @@
   template:
     src: traefik.toml.j2
     dest: "{{ traefik_directory }}/traefik.toml"
+    mode: 0644
   when: traefik_consul_enable
 
 - name: Render docker-compose config
   template:
     src: docker-compose.yml.j2
     dest: "{{ traefik_compose }}"
+    mode: 0644
     validate: "{{ traefik_docker_compose_path }} -f %s config -q"
 
 - name: Ensure acme config

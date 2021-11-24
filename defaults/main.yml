@@ -52,3 +52,6 @@ traefik_manage_ansible_dependencies: true
 
 # dependening on 'context' (root/non-root and Linux flavor)
 traefik_docker_compose_path: "docker-compose"
+
+# PROXY protocol
+traefik_loadbalancer_network: ""
