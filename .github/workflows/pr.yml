@@ -40,9 +40,9 @@ jobs:
       fail-fast: true
       matrix:
         scenario:
-          # - swarm-no-consul
-          # - swarm
-          # - proxy
+          - swarm-no-consul
+          - swarm
+          - proxy
           - default
     steps:
       - uses: docker/setup-buildx-action@v1
