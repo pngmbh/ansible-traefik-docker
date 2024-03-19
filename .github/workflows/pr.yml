@@ -9,47 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: docker/setup-buildx-action@v3
-    - uses: docker/build-push-action@v5
-      if: ${{ !env.ACT }}
+    - run: mkdir -p /root/.cache/pip
+    - uses: actions/setup-python@v5
       with:
-        context: .
-        tags: ${{ env.DOCKER_IMAGE }}
-        outputs: type=docker,dest=/tmp/molecule-test.tar
-    - uses: docker/build-push-action@v5
-      if: ${{ env.ACT }}
-      with:
-        context: .
-        tags: ${{ env.DOCKER_IMAGE }}
-        outputs: type=docker
-    - uses: actions/upload-artifact@v4
-      if: ${{ !env.ACT }}
-      with:
-        name: docker-image
-        path: /tmp/molecule-test.tar
-
-  molecule:
-    name: "molecule-test-${{ matrix.scenario }}"
-    needs: build
-    env:
-      HCLOUD_TOKEN: "${{ secrets.HCLOUD_TOKEN }}"
-      DOCKER_IMAGE: "molecule-test:latest"
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: true
-      matrix:
-        scenario:
-        - swarm-no-consul
-        - proxy
-        - default
-    steps:
-    - uses: docker/setup-buildx-action@v3
-    - uses: actions/download-artifact@v4
-      if: ${{ !env.ACT }}
-      with:
-        name: docker-image
-        path: /tmp
-    - run: docker load --input /tmp/molecule-test.tar
-      if: ${{ !env.ACT }}
-    - run: >
-        docker run -v /var/run/docker.sock:/var/run/docker.sock --env HCLOUD_TOKEN --env RUN_ID=${{ github.run_id }} --env MOLECULE_DEBUG=true ${{ env.DOCKER_IMAGE }} test -s ${{ matrix.scenario }}
+        architecture: x64
+        python-version: '3.7.17'
+        cache: 'pip'
+    - run: ansible-lint ./
