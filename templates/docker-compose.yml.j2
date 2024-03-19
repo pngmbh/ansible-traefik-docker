@@ -2,37 +2,8 @@
 version: '{{ traefik_compose_version }}'
 
 services:
-{% if traefik_consul_enable %}
-  traefik_init:
-    image: {{ traefik_image }}:{{ traefik_version }}
-    deploy:
-      placement:
-        constraints:
-          - node.role == manager
-      restart_policy:
-        condition: on-failure
-    command:
-      - "storeconfig"
-      - "--consul"
-      - "--consul.endpoint={{ traefik_consul_endpoint }}"
-      - "--consul.prefix=traefik"
-      - "--configfile=/traefik.toml"
-    volumes:
-      - {{ traefik_directory }}/traefik.toml:/traefik.toml:ro
-{% endif %}
   traefik:
     image: {{ traefik_image }}:{{ traefik_version }}
-{% if traefik_consul_enable %}
-    command:
-      - "--consul"
-      - "--consul.endpoint={{ traefik_consul_endpoint }}"
-      - "--consul.prefix=traefik"
-{% if traefik_consul_watch %}
-      - "--consul.watch"
-{% endif %}
-    depends_on:
-      - traefik_init
-{% endif %}
     ports:
 {% if traefik_use_swarm %}
       - target: 80
@@ -57,12 +28,8 @@ services:
 {% endif %}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-{% if not traefik_consul_enable %}
       - {{ traefik_directory }}/traefik.toml:/traefik.toml
-{% if traefik_acme_enable %}
       - {{ traefik_directory }}/acme.json:/acme.json
-{% endif %}
-{% endif %}
 {% if not traefik_use_swarm %}
     container_name: traefik
     restart: always
