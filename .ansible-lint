@@ -1,5 +1,7 @@
+---
 skip_list:
   - '701'
   - '301'
 exclude_paths:
   - .github/
+  - molecule/
