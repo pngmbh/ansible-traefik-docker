@@ -31,12 +31,6 @@ traefik_acme_autocreate_from_host: true
 traefik_acme_email: "admin@mydomain.org"
 traefik_acme_use_staging_ca: true
 
-# Consul Key-Value backend
-traefik_consul_enable: false
-traefik_consul_endpoint: "127.0.0.1:8500"
-traefik_consul_prefix: "traefik"
-traefik_consul_watch: true
-
 # Compose, or Swarm?
 traefik_use_swarm: false
 # Switch this on for multi-node swarm clusters.

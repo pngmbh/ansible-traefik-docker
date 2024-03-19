@@ -16,15 +16,7 @@
     src: traefik.toml.j2
     dest: "{{ traefik_directory }}/traefik.toml"
     mode: 0644
-  when: not traefik_consul_enable
   notify: restart traefik
-
-- name: Render traefik config for seeding
-  template:
-    src: traefik.toml.j2
-    dest: "{{ traefik_directory }}/traefik.toml"
-    mode: 0644
-  when: traefik_consul_enable
 
 - name: Render docker-compose config
   template:
@@ -38,7 +30,7 @@
     path: "{{ traefik_directory }}/acme.json"
     state: touch
     mode: 0600
-  when: traefik_acme_enable and not traefik_consul_enable
+  when: traefik_acme_enable
   changed_when: false
 
 - name: Pull Docker image

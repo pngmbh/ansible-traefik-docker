@@ -88,11 +88,7 @@ swarmMode = true
 {% if traefik_acme_enable %}
 [acme]
 email = "{{ traefik_acme_email }}"
-{% if traefik_consul_enable %}
-storage = "traefik/acme/account"
-{% else %}
 storage = "acme.json"
-{% endif %}
 entryPoint = "https"
 {% if traefik_acme_use_staging_ca %}
 caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
@@ -100,11 +96,4 @@ caServer = "https://acme-staging-v02.api.letsencrypt.org/directory"
 onHostRule = {{ traefik_acme_autocreate_from_host | lower }}
 [acme.httpChallenge]
 entryPoint = "http"
-{% endif %}
-
-{% if traefik_consul_enable %}
-[consul]
-endpoint = "{{ traefik_consul_endpoint }}"
-watch = {{ traefik_consul_watch | lower }}
-prefix = "{{ traefik_consul_prefix }}"
 {% endif %}
