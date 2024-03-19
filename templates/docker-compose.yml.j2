@@ -4,6 +4,8 @@ version: '{{ traefik_compose_version }}'
 services:
   traefik:
     image: {{ traefik_image }}:{{ traefik_version }}
+    environment:
+      - "GODEBUG=tls13=1"
     ports:
 {% if traefik_use_swarm %}
       - target: 80
