@@ -9,7 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
+    - run: mkdir -p ${GITHUB_HOME}/.cache/pip
+      if: ${{ !env.ACT }}
     - run: mkdir -p /root/.cache/pip
+      if: env.ACT
     - uses: actions/setup-python@v5
       with:
         architecture: x64
