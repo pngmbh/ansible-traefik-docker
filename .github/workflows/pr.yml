@@ -4,18 +4,14 @@ on: pull_request
 
 jobs:
   build:
-    env:
-      DOCKER_IMAGE: "molecule-test:latest"
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - run: mkdir -p /home/runner/.cache/pip
-      if: ${{ !env.ACT }}
-    - run: mkdir -p /root/.cache/pip
-      if: env.ACT
     - uses: actions/setup-python@v5
       with:
-        python-version: '3.7.17'
+        python-version: '3.11.10'
         cache: 'pip'
     - run: pip install -r requirements.txt
     - run: ansible-lint ./
+    - run: ansible-playbook -i localhost, -c local playbook.yml --syntax-check --verbose
+

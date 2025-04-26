@@ -1,14 +1,20 @@
 ---
-- include: guard.yml
+- name: "guard"
+  ansible.builtin.include_tasks: guard.yml
 
-- include: install.yml
+- name: "install"
+  ansible.builtin.include_tasks: install.yml
 
-- include: install-network.yml
+- name: "install network"
+  ansible.builtin.include_tasks: install-network.yml
 
-- include: configure.yml
+- name: "configure traefik"
+  ansible.builtin.include_tasks: configure.yml
 
-- include_tasks: configure-compose.yml
+- name: "deploy with docker-compose"
+  ansible.builtin.include_tasks: configure-compose.yml
   when: not traefik_use_swarm
 
-- include_tasks: configure-swarm.yml
+- name: "deploy with docker swarm"
+  ansible.builtin.include_tasks: configure-swarm.yml
   when: traefik_use_swarm

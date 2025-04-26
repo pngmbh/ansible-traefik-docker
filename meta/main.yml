@@ -3,15 +3,9 @@ galaxy_info:
     role_name: ansible_traefik_docker
     namespace: pngmbh
     description: role to install traefik for/via docker
-    license:
-        - MIT
-    min_ansible_version: 2.0
-    platforms:
-        - name: EL
-          versions:
-              - 7
-        - name: Ubuntu
-          versions:
-              - xenial
+    license: "MIT"
+    min_ansible_version: "2.12.0"
+    platforms: []
     galaxy_tags: []
+    author: Planetary Quantum GmbH
 dependencies: []
