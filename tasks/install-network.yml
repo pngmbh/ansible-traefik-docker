@@ -1,39 +1,40 @@
 ---
 - block:
     - name: Create traefik docker network
-      docker_network:
+      community.docker.docker_network:
         name: "{{ traefik_docker_network }}"
         state: present
       register: _docker_network
     - name: "NO swarm: show network - FIXME"
-      debug:
+      ansible.builtin.debug:
         var: _docker_network
 
     - name: "NO swarm: set _docker_network_cidr for proxy protocol"
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_network_cidr: "{{ _docker_network.network.IPAM.Config[0].Subnet }}"
   when: not traefik_use_swarm
 
 - block:
     - name: Install dependencies
-      pip:
+      ansible.builtin.pip:
         name:
           - jsondiff==1.2.0
           - pyyaml==5.2
+          - requests<2.32.0
       when: traefik_manage_ansible_dependencies
 
     - name: Create traefik docker network (Swarm)
-      docker_network:
+      community.docker.docker_network:
         name: "{{ traefik_docker_network }}"
         state: present
         attachable: "{{ traefik_swarm_network_attachable | bool }}"
         driver: "{{ traefik_swarm_network_driver }}"
       register: _docker_network
     - name: "swarm: show network - FIXME"
-      debug:
+      ansible.builtin.debug:
         var: _docker_network
 
     - name: "swarm: set _docker_network_cidr for proxy protocol"
-      set_fact:
+      ansible.builtin.set_fact:
         _docker_network_cidr: "{{ _docker_network.network.IPAM.Config[0].Subnet }}"
   when: traefik_use_swarm

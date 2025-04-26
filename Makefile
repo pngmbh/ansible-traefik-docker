@@ -1,3 +1,5 @@
 .PHONY: test
 test:
-	act "pull_request"
+	 act --platform \
+		ubuntu-latest=catthehacker/ubuntu:act-latest \
+		--container-architecture linux/amd64 "pull_request"

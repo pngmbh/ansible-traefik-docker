@@ -3,19 +3,19 @@
 - name: Basic auth is enabled, no fwd auth server is configured
   block:
     - name: Test [basic auth, dashboard is enabled]
-      assert:
+      ansible.builtin.assert:
         that:
           - traefik_dashboard_enable
         fail_msg: "Please enable dashboard if you want basic auth for it"
         quiet: true
     - name: Test [basic auth enabled]
-      assert:
+      ansible.builtin.assert:
         that:
           - traefik_dashboard_fwdauth_server|length == 0
         fail_msg: "You tried to enable basic auth AND fwd auth (hint: unconfigured traefik_dashboard_fwdauth_server)"
         quiet: true
     - name: Test [basic auth users are set]
-      assert:
+      ansible.builtin.assert:
         that:
           - traefik_dashboard_basicauth_users|length > 0
         fail_msg: "You enabled basic auth without users (hint: configure traefik_dashboard_basicauth_users)"
@@ -26,13 +26,13 @@
 - name: Fwd auth server is configured correctly
   block:
     - name: Test [fwd auth, dashboard is enabled]
-      assert:
+      ansible.builtin.assert:
         that:
           - traefik_dashboard_enable
         fail_msg: "Please enable dashboard if you want forward auth for it"
         quiet: true
     - name: Test [fwd auth is configured]
-      assert:
+      ansible.builtin.assert:
         that:
           - traefik_dashboard_basicauth_users|length == 0
           - not traefik_dashboard_basicauth_enable

@@ -1,32 +1,32 @@
 ---
 - name: Labels include fwd auth
-  set_fact:
+  ansible.builtin.set_fact:
     traefik_dashboard_labels: "{{ _traefik_dashboard_labels + _traefik_dashboard_fwdauth_labels }}"
   when:
     - traefik_dashboard_fwdauth_server|length > 0
 
 - name: Labels don't include fwd auth
-  set_fact:
+  ansible.builtin.set_fact:
     traefik_dashboard_labels: "{{ _traefik_dashboard_labels }}"
   when:
     - traefik_dashboard_fwdauth_server|length == 0
 
 - name: Render traefik config
-  template:
+  ansible.builtin.template:
     src: traefik.toml.j2
     dest: "{{ traefik_directory }}/traefik.toml"
     mode: 0644
   notify: restart traefik
 
 - name: Render docker-compose config
-  template:
+  ansible.builtin.template:
     src: docker-compose.yml.j2
     dest: "{{ traefik_compose }}"
     mode: 0644
     validate: "{{ traefik_docker_compose_path }} -f %s config -q"
 
 - name: Ensure acme config
-  file:
+  ansible.builtin.file:
     path: "{{ traefik_directory }}/acme.json"
     state: touch
     mode: 0600
@@ -34,7 +34,7 @@
   changed_when: false
 
 - name: Pull Docker image
-  docker_image:
+  community.docker.docker_image:
     name: traefik
     source: pull
     tag: "{{ traefik_version }}"
